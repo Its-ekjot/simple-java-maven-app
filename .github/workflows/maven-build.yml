@@ -1,4 +1,4 @@
-name: Gradle Build and Run
+name: Maven Build and Run Java
 
 on:
   push:
@@ -7,15 +7,14 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  build:
+  build-run:
     runs-on: ubuntu-latest
 
     steps:
 
-    - name: Checkout Repository
+    - name: Checkout Source Code
       uses: actions/checkout@v4
 
     - name: Setup Java
@@ -24,12 +23,9 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Grant execute permission for Gradle
-      run: chmod +x gradlew
+    - name: Build with Maven
+      run: mvn clean package
 
-    - name: Build with Gradle
-      run: ./gradlew build
-
-    - name: Run Application
-      run: ./gradlew run
-
+    - name: Run Java Application
+      run: |
+        java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App
